@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./lib/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="./lib/ionicons.min.css">
+
+    <!-- jQuery 2.2.3 -->
+    <script src="./lib/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./lib/AdminLTE/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="./lib/AdminLTE/css/skins/_all-skins.min.css">
+    <!-- AdminLTE App -->
+    <!--<script src="./lib/AdminLTE/js/app.min.js"></script>-->
+
+
+    <script src="./lib/CesiumUnminified/Cesium.js"></script>
+    <script type="text/javascript" src="./js/viewerCesiumNavigationMixin.js"></script>
+    <script type="text/javascript" src="./js/utils.js"></script>
+    <script type="text/javascript" src="./js/LTCesium.js"></script>
+
+    <script type="text/javascript" src="./lib/Echarts/echarts.min.js"></script>
+
+    <script type="text/javascript" src="./js/app.js"></script>
+
+    <script src="./lib/leaflet/leaflet.js"></script>
+     <!--加载本地切片-->
+    <script src="./lib/leaflet/proj4-compressed.js"></script>
+    <script src="./lib/leaflet/proj4leaflet.js"></script>
+    <script src="./lib/leaflet/arcgislocalcache.js"></script>
+    <script src="./js/CommonFun.js"></script>
+    <script src="./js/map.js"></script>
+  <style>
+      @import url(./lib/Cesium/Widgets/widgets.css);
+      @import url(./lib/leaflet/leaflet.css);
+      @import url(./lib/font-awesome.min.css);
+      html, body, #cesiumContainer,#leafletContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+          font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier;
+          background-color: #30302f;
+      }
+      .navigation-controls{
+          //background: #4f565a;
+      }
+      .logo_div{
+          position: absolute;
+          top:10px;
+          left:10px;
+          color: #edffff;
+          z-index: 600;
+      }
+      .logo_div h1{
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
+      }
+      .logo_div h4,.logo_div h3{
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
+          margin-left: 2px;
+      }
+      .card {
+          background: rgba(47,53,60,.8);
+      }
+      .info-box{
+          background: transparent;
+          box-shadow:0 0 0;
+      }
+      .layer {
+          position: absolute;
+          max-width: 300px;
+          min-width: 220px;
+          width: 25%;
+          z-index: 2;
+          text-align: left;
+          color: #fff;
+      }
+      .top-div{
+          position: absolute;
+          top: 0;
+          width: 100%;
+          padding-top: 15px;
+          padding-right: 15px;
+          color: #fff;
+          z-index: 600;
+
+      }
+      .bottom_div{
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 25%;
+          max-height: 300px;
+          min-height: 250px;
+          text-align: center;
+          color: #fff;
+          z-index: 600;
+      }
+      .bottom1{
+          width: 25%;
+          height: 100%;
+          //max-width: 300px;
+          min-width: 250px;
+          padding-left: 10px;
+          padding-right: 10px;
+          border-right-width: 1px;
+          border-right-style: solid;
+          border-right-color: #242427;
+          float: left;
+      }
+      .bottom2{
+          //width: 75%;
+          height: 100%;
+          float: left;
+          min-width: 1000px;
+          padding-left: 10px;
+      }
+      .score_card{
+          width: 280px;
+          height: 180px;
+          text-align: center;
+          margin: 0px auto;
+      }
+      .score_card p{
+          margin-top: 10px;
+      }
+      .score{
+          font-size: -webkit-xxx-large;
+          border: 4px solid #228a22;
+          border-radius: 50%;
+          width: 75px;
+          height: 75px;
+          float: left;
+          margin-bottom: 12px;
+      }
+      .level{
+          width: 100px;
+          float: left;
+          font-size: x-large;
+          font-weight: bold;
+          margin: 22px 8px;
+      }
+      .panel_title{
+          //text-align: left;
+
+      }
+      .desc_label{
+          float: left;
+      }
+      .monitor-div{
+          text-align: left;
+          padding-left: 20px;
+      }
+      .row{
+          margin-left: 0;
+      }
+      .monitor-title{
+          margin-bottom: 5px;
+      }
+      .monitor-chart{
+          min-height:135px;
+      }
+      .left-nav{
+          position: absolute;
+          left: 30px;
+          top:100px;
+          //width: 50px;
+          bottom: 25%;
+          z-index: 600;
+      }
+      .nav-item{
+          width: 50px;
+          height:50px;
+          padding: 10px;
+          margin: 10px;
+          border-radius: 50%;
+          background: rgba(47,53,60,.8);
+          color: #fff;
+
+      }
+      .nav-item i{
+          cursor: pointer;
+      }
+      #nav_jc,#nav_sz{
+          padding: 12px;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="leafletContainer">
+
+  </div>
+  <!--<div id="logo-title" class="logo_div">
+    <h1>煤矿安全生产“一张图”</h1>
+    <h3>Mine Safety Production Map</h3>
+  </div>
+  <div class="left-nav">
+      <div id="nav_home" class="nav-item">
+          <i class="fa fa-2x fa-university" aria-hidden="true" title="主页" onclick="hideMap();toHome();"></i>
+      </div>
+      <div id="nav_jc" class="nav-item"><i class="fa fa-podcast fa-2x" aria-hidden="true" title="综合监测"></i></div>
+      <div id="nav_fc" class="nav-item"><i class="fa fa-area-chart fa-2x" aria-hidden="true" title="综合分析"></i></div>
+      <div id="nav_pg" class="nav-item"><i class="fa fa-address-card-o fa-2x" aria-hidden="true" title="综合评估"></i></div>
+      <div id="nav_bh" class="nav-item"><i class="fa fa-tachometer fa-2x" aria-hidden="true" title="标绘"></i></div>
+      <div id="nav_ss" class="nav-item"><i class="fa fa-search fa-2x" aria-hidden="true" title="搜索"></i></div>
+      <div id="nav_sz" class="nav-item"><i class="fa fa-cog fa-2x" aria-hidden="true" title="设置"></i></div>
+  </div>-->
+  <div id="bottom-div" class="bottom_div card">
+      <div class="row" style="margin-top: 10px;">
+      <div class="col-md-4 bottom1">
+          <h3 class="panel_title">煤矿安全环境评价指标</h3>
+          <div class="score_card" id="score-chart">
+             <!-- <div class="score">85</div>
+              <div class="level">
+
+                  <div class="" style="color: #228a22;">二级良好</div>
+              </div>
+              <div class="desc_label">&nbsp;&nbsp;煤矿安全管理评价指标</div>-->
+          </div>
+
+      </div>
+      <div class="col-md-8 bottom2">
+          <div class="row">
+              <div class="col-md-4 monitor-div">
+                  <div class="">
+                    <span style="font-size: -webkit-xxx-large;">25</span>
+                      <label>人</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label style="font-size: x-large;">井下人员</label>
+                  </div>
+                  <div class="monitor-title">井下人数变化趋势</div>
+                  <div id="ryChart" class="monitor-chart"></div>
+              </div>
+              <div class="col-md-4 monitor-div">
+                  <div class="">
+                      <span style="font-size: -webkit-xxx-large;">5</span>
+                      <label>个</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label style="font-size: x-large;">报警</label>
+                  </div>
+                  <div class="monitor-title">报警数变化趋势</div>
+                  <div id="bjChart" class="monitor-chart"></div>
+              </div>
+              <div class="col-md-4 monitor-div">
+                  <div class="">
+                      <span style="font-size: -webkit-xxx-large;">2</span>
+                      <label>个</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label style="font-size: x-large;">故障</label>
+                  </div>
+                  <div class="monitor-title">故障数变化趋势</div>
+                  <div id="gzChart" class="monitor-chart"></div>
+              </div>
+          </div>
+      </div>
+      </div>
+  </div>
+  <div id="top-div" class="top-div card">
+      <!-- Info boxes -->
+      <div class="row">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                  <span class="info-box-icon bg-aqua"><i class="fa fa-fire-extinguisher"></i></span>
+
+                  <div class="info-box-content">
+                      <span class="info-box-text">瓦斯</span>
+                      <span class="info-box-number">预警&nbsp;&nbsp;&nbsp;&nbsp;<small>1个测点</small></span>
+                  </div>
+                  <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                  <span class="info-box-icon bg-red"><i class="fa  fa-user-plus"></i></span>
+
+                  <div class="info-box-content">
+                      <span class="info-box-text">人员</span>
+                      <span class="info-box-number">正常&nbsp;&nbsp;&nbsp;&nbsp;<small>25人</small></span>
+                  </div>
+                  <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+          <!-- fix for small devices only -->
+          <div class="clearfix visible-sm-block"></div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                  <span class="info-box-icon bg-green"><i class="fa fa-server"></i></span>
+
+                  <div class="info-box-content">
+                      <span class="info-box-text">设备</span>
+                      <span class="info-box-number">正常&nbsp;&nbsp;&nbsp;&nbsp;<small>121个监测设备</small></span>
+                  </div>
+                  <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                  <span class="info-box-icon bg-yellow"><i class="fa fa-tty"></i></span>
+
+                  <div class="info-box-content">
+                      <span class="info-box-text">通信</span>
+                      <span class="info-box-number">正常&nbsp;&nbsp;&nbsp;&nbsp;<small>11个通信设备</small></span>
+                  </div>
+                  <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+      </div>
+
+  </div>
+  <div id="loadingOverlay" class="loadingIndicator"></div>
+  <script>
+
+    var ltcs,viewer;
+    var loadingIndicator;
+    var canFly=false;
+    var canDistanse=false;
+    function startup(Cesium) {
+        "use strict";
+        //Sandcastle_Begin
+        ltcs=new LTCesium('cesiumContainer');
+        //默认视图范围
+        ltcs.DEFAULT_VIEW_RECTANGLE(113.0, 36.0, 113.00001, 36.00001);
+        loadingIndicator = document.getElementById('loadingOverlay');
+        loadingIndicator.style.display = 'block';
+        viewer=ltcs.viewer;
+
+
+
+
+
+        ltcs.setProductInfo("");
+
+
+
+        var camera = viewer.camera;
+        camera.moveStart.addEventListener(function() {
+            console.log("moveStart",camera.heading,camera.pitch,camera.roll);
+        });
+        camera.moveEnd.addEventListener(function() {
+            console.log("moveEnd",camera.heading,camera.pitch,camera.roll);
+            var longitude = ltcs.radian2angle(camera.pitch,2);
+            console.log(longitude);
+            console.log("camera",camera.position);
+            console.log(ltcs.getDestAndOri(camera));
+            //showLODModels();
+            //showNBModels();
+        });
+
+
+        setTimeout(function(){
+            ltcs.flyTo(113.0578, 36.0972, 1800.0);
+            //ltcs.flyTo(111.0512, 34.0975, 800.0);
+            //ltcs.flyToDestAndOri(jinlingLocation);
+            //addSchoolLabel();
+        },5000);
+
+
+        //ltcs.addModel('./data/gltf/sima.gltf',0.9,113.052,36.102, 0,2.5,0,0);
+        var zj=addEntity('./img/icon.png',24,113.0568,36.102, 960,2.5,0,0,generateMixed(6),"主井入口");
+        var jf=addPicLabel('./img/dropbox.png',24,113.0568,36.105, 950,generateMixed(6),"JIFANG");
+
+        var pickColor = Cesium.Color.CYAN.withAlpha(0.7);
+        var selectedEntity = new Map();
+        var resolutions = [
+            0.059486525145757009,
+            0.029743262572878505,
+            0.019035688046642241,
+            0.0095178440233211203,
+            0.0047589220116605602,
+            0.0023794610058302801,
+            0.00118973050291514,
+            0.00059486525145757002,
+            0.00029743262572878501,
+            0.00015228550437313792,
+            0.000071383830174908409,
+            0.000023794610058302804
+        ];
+        //var map = initLocalBaseMap('leafletContainer', 'http://11.2.8.70:9988/china_dt', resolutions, null, [37.6, 112.543], 3, 0);
+
+        var mapconfig='37505381.9472,4126367,37509047.9472,4130033*7';
+        var mapbz = mapconfig.split('*');         //获取地图的范围
+        var mapb = mapbz[0];
+        var mapz = parseInt(mapbz[1]);
+        var mapba = getAMapExtent(mapb);
+        var map_extent = mapba;
+
+        var map_resolution = getAResolutions(mapb, mapz);
+        var map = initMineMap('leafletContainer', 'http://11.2.8.70:9988/140431007', mapba, mapz,null, [4128367, 37506581], 2, 0);
+
+
+        var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+        handler.setInputAction(function(click) {
+            var pickedObject = viewer.scene.pick(click.position);
+            if (Cesium.defined(pickedObject)) {
+                var entityId = pickedObject.id._id;
+                var e=viewer.entities.getById(entityId);
+                console.log(entityId,e);
+                ltcs.flyTo(e.lng, e.lat, 1000.0,0,-90,0);
+                setTimeout(function(){
+                    showMap();
+                },5000);
+
+            }
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+        initCharts();
+        hideMap();
+
+        //Sandcastle_End
+        loadingIndicator.style.display = 'none';
+
+    }
+
+    if (typeof Cesium !== "undefined") {
+        startup(Cesium);
+    } else if (typeof require === "function") {
+        require(["Cesium"], startup);
+    }
+  </script>
+</body>
+</html>

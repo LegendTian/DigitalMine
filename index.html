@@ -128,7 +128,7 @@
           padding-left: 10px;
       }
       .score_card{
-          width: 280px;
+          width: 290px;
           height: 180px;
           text-align: center;
           margin: 0px auto;
@@ -376,8 +376,13 @@
 
 
         //ltcs.addModel('./data/gltf/sima.gltf',0.9,113.052,36.102, 0,2.5,0,0);
-        var zj=addEntity('./img/icon.png',24,113.0568,36.102, 960,2.5,0,0,generateMixed(6),"主井入口");
-        var jf=addPicLabel('./img/dropbox.png',24,113.0568,36.105, 950,generateMixed(6),"JIFANG");
+        var zj=addEntity('./img/icon.png',24,113.0568,36.1049, 960,2.5,0,0,generateMixed(6),"主井入口");
+        var gc=addEntity('./img/icon.png',24,113.0568,36.1035, 960,2.5,0,0,generateMixed(6),"工业广场");
+        var jd=addEntity('./img/icon.png',24,113.0567,36.1014, 960,2.5,0,0,generateMixed(6),"机电设备操作间");
+        var kf=addEntity('./img/icon.png',24,113.0568,36.101, 960,2.5,0,0,generateMixed(6),"库房");
+        var bd=addEntity('./img/icon.png',24,113.0562,36.1014, 960,2.5,0,0,generateMixed(6),"变电站");
+        var wsbf=addEntity('./img/icon.png',24,113.0562,36.102, 960,2.5,0,0,generateMixed(6),"瓦斯抽采（放）泵房");
+        //var zj=addPicLabel('./img/dropbox.png',24,113.0568,36.104, 950,generateMixed(6),"主井入口");
 
         var pickColor = Cesium.Color.CYAN.withAlpha(0.7);
         var selectedEntity = new Map();

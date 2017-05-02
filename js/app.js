@@ -37,15 +37,17 @@ var initCharts = function () {
             }
         },*/
 
-        tooltip: {},
+        tooltip: {
+            //formatter:'{a}: {c}%<br />'
+        },
         radar: {
             indicator: [
-                {name: '管理机制(MMS)', max: 100},
-                {name: '组织保障(OG)', max: 100},
-                {name: '安全文化(SC)', max: 100},
-                {name: '资源投入(RI)', max: 100},
-                {name: '管理方法(MMT)', max: 100},
-                {name: '人员能力(PC)', max: 100}
+                {name: '氧气(O2)', max: 100},
+                {name: '甲烷(CH4)', max: 1},
+                {name: '二氧化碳(CO2)', max: 5},
+                {name: '一氧化碳(CO)', max: 2},
+                {name: '一氧化氮(NO)', max: 3},
+                {name: '二氧化硫(SO2)', max: 3}
             ],
             radius: 60,
             //shape: 'circle',
@@ -81,8 +83,8 @@ var initCharts = function () {
                 data:  [
 
                     {
-                        value : [64.697, 57.510, 59.088, 50.589, 66.643, 52.305],
-                        name : '实际指标'
+                        value : [91, 0.8, 3.2, 1, 2, 2],
+                        name : '监测值'
                     }
                 ],
                 symbol: 'none',
